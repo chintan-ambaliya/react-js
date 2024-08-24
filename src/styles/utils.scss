@@ -1,0 +1,7 @@
+@for $i from 1 through 64 {
+    @if $i % 2 == 0 {
+        .fs-#{$i} {
+            font-size: #{$i}px !important;
+        }
+    }
+}

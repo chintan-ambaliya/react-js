@@ -1,0 +1,7 @@
+@import "./../../styles/variables.scss";
+
+.sidebar {
+    flex: 0 0 250px;
+    border-right: 1px solid $o-gray-400;
+    padding: 20px;
+}

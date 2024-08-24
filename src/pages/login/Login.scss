@@ -1,0 +1,26 @@
+@import '../../styles/variables';
+
+.o_Login {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--bs-border-radius);
+  background-color: lighten($primary-color, 50%);
+  margin-top: 200px;
+
+  .o_Login_container {
+    width: 300px;
+    max-width: 100%;
+
+    .o_form_field {
+      input {
+        display: block;
+        width: 100%;
+        height: 30px;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

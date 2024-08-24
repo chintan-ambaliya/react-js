@@ -1,0 +1,35 @@
+@import './variables';
+
+$primary: $primary-color;
+
+$breadcrumb-divider:                quote(">") !default;
+$breadcrumb-item-padding-x:         1rem !default;
+$breadcrumb-margin-bottom:          0 !default;
+
+@import "bootstrap/scss/bootstrap";
+@import "./utils";
+@import "./animation";
+
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+
+@mixin o-print-color($-color, $-rule, $-css-opacity-var) {
+    --#{$-rule}: RGBA(#{to-rgb($-color)}, var(--#{$-css-opacity-var}, 1));
+    #{$-rule}: var(--#{$-rule}) !important;
+}
+
+@each $-name, $-color in $o-grays {
+    .text-#{$-name}  {
+        @include o-print-color($-color, color, bg-opacity);
+    }
+
+    .bg-#{$-name}, .text-bg-#{$-name}  {
+        @include o-print-color($-color, background-color, bg-opacity);
+    }
+
+    .text-bg-#{$-name} {
+        @include o-print-color(color-contrast($-color), color, text-opacity);
+    }
+}

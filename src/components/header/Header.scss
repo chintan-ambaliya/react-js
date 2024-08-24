@@ -1,0 +1,35 @@
+.o_Header {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+
+    .o_logo {
+        margin-left: 5px;
+        svg {
+            max-width: 200px;
+            max-height: 36px;
+        }
+    }
+
+    .o_sidebar_toggle {
+        cursor: pointer;
+    }
+
+    .o_systray {
+        .o_systray_item {
+            display: flex;
+            align-items: center;
+            padding: 8px 8px;
+            border-radius: var(--bs-border-radius);
+            cursor: pointer;
+
+            &:focus, &:active, &:hover {
+                background-color: #dddddd;
+            }
+
+            span.fa {
+                color: #8e8e8e;
+            }
+        }
+    }
+}
