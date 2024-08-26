@@ -1,24 +1,33 @@
-import React, {useState} from 'react';
-import {useAuth} from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {login} from "../../store/auth";
+import {useNavigate} from 'react-router-dom';
 import './Login.scss';
 
 const Login = () => {
     const [username, setUsername] = useState('test@test.com');
     const [password, setPassword] = useState('test');
     const [isLoading, setLoading] = useState(false);
-    const {login} = useAuth();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/');
+            setLoading(false);
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (isLoading) return;
         setLoading(true);
-        const result = await login(username, password);
-        if (result) {
-            navigate('/');
+        const payload = {
+            email: username,
+            password,
         }
-        setLoading(false);
+        await dispatch(login(payload));
     };
 
     return (

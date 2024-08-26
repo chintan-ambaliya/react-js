@@ -9,16 +9,18 @@ import Breadcrumb from "./components/breadcrumb/Breadcrumb";
 import Home from './pages/home/Home';
 import Invoice from './pages/invoice/Invoice';
 import Login from './pages/login/Login';
-import {AuthProvider, useAuth} from './contexts/AuthContext';
+import {Provider} from 'react-redux';
+import {useSelector} from 'react-redux';
+import store from "./store";
 
 const ProtectedRoute = ({children}) => {
-    const {isAuthenticated} = useAuth();
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     return isAuthenticated ? children : <Navigate to="/login"/>;
 };
 
 function App() {
     return (
-        <AuthProvider>
+        <Provider store={store}>
             <Router>
                 <div className="App">
                     <Header/>
@@ -29,10 +31,10 @@ function App() {
                             <div className="page">
                                 <div>
                                     <Routes>
-                                        <Route path="/login" element={<Login/>}/>
-                                        <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
-                                        <Route path="/invoice" element={<ProtectedRoute><Invoice/></ProtectedRoute>}/>
-                                        <Route path="/invoice/:id" element={<ProtectedRoute><Invoice/></ProtectedRoute>}/>
+                                        <Route path="/" exact={true} element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+                                        <Route path="/login" exact={true} element={<Login/>}/>
+                                        <Route path="/invoice" exact={true} element={<ProtectedRoute><Invoice/></ProtectedRoute>}/>
+                                        <Route path="/invoice/:id" exact={true} element={<ProtectedRoute><Invoice/></ProtectedRoute>}/>
                                     </Routes>
                                 </div>
                             </div>
@@ -41,7 +43,7 @@ function App() {
                     </main>
                 </div>
             </Router>
-        </AuthProvider>
+        </Provider>
     );
 }
 

@@ -1,20 +1,25 @@
-import React from 'react';
-import {useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
+import {useDispatch} from "react-redux";
+import Dropdown from 'bootstrap/js/dist/dropdown';
+import {authActions} from "../../store/auth";
+import {uiActions} from "../../store/ui";
 import {ReactComponent as Logo} from './../../images/logo.svg'
 import './Header.scss';
-import Dropdown from 'bootstrap/js/dist/dropdown';
-import {useAuth} from "../../contexts/AuthContext";
 
 const Header = () => {
+    const dispatch = useDispatch();
     const userDropdown = useRef(null);
-    const {logout, toggleSidebar} = useAuth();
 
     useEffect(() => {
         new Dropdown(userDropdown.current, {autoClose: true, display: 'right-start'});
     }, []);
 
+    const handleLogout = () => {
+        dispatch(authActions.logout());
+    };
+
     const handleToggleSidebar = () => {
-        toggleSidebar();
+        dispatch(uiActions.toggleSidebar());
     };
 
     return (
@@ -45,9 +50,9 @@ const Header = () => {
                                     <i className="fa fa-user"/>
                                 </span>
                                 <div className="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <a className="dropdown-item" href="#">Admin</a>
+                                    <span className="dropdown-item">Admin</span>
                                     <div className="dropdown-divider"/>
-                                    <a className="dropdown-item" href="#" onClick={logout}>Logout</a>
+                                    <span className="dropdown-item" onClick={handleLogout}>Logout</span>
                                 </div>
                             </div>
                         </div>

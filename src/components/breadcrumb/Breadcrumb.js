@@ -1,9 +1,9 @@
 import React from 'react';
 import './Breadcrumb.scss';
-import {useAuth} from "../../contexts/AuthContext";
+import {useSelector} from "react-redux";
 
 const Breadcrumb = () => {
-    const {isAuthenticated, logout} = useAuth();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
     return (
         <>

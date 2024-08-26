@@ -4,10 +4,9 @@ import Dropdown from 'bootstrap/js/dist/dropdown';
 const InvoiceRow = (props) => {
     const {record, fields} = props;
     const userDropdown = useRef(null);
-    let dropdown = {};
 
     useEffect(() => {
-        dropdown = new Dropdown(userDropdown.current, {autoClose: true, display: 'static', boundary: document.body});
+        new Dropdown(userDropdown.current, {autoClose: true, display: 'static', boundary: document.body});
     }, []);
 
     return (

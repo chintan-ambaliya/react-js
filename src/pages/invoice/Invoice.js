@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 import InvoiceDialog from './invoice_dialog/InvoiceDialog';
 import InvoiceRow from './InvoiceRow';
 import {fetchInvoices} from "../../api/API";
-import {useAuth} from "../../contexts/AuthContext";
 import Pager from './../../components/pager/Pager';
 import './Invoice.scss';
 
 const Invoice = () => {
     const {id} = useParams();
-    const {isAuthenticated} = useAuth();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const navigate = useNavigate();
     const [invoiceData, setInvoiceData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -113,7 +113,7 @@ const Invoice = () => {
                         </div>
                     </div>
                     <div className="col d-flex gap-3">
-                        <div className="btn btn-outline-danger"><i className="fa fa-filter me-2"/> Filters</div>
+                        <div className="btn btn-outline-primary"><i className="fa fa-filter me-2"/> Filters</div>
                         <div className="btn btn-outline-secondary"><i className="fa fa-cog me-2"/> Configurations</div>
                         <div className="btn btn-primary ms-auto" onClick={onClickCreateInvoice}><i className="fa fa-plus me-2"/> Create Invoice</div>
                     </div>

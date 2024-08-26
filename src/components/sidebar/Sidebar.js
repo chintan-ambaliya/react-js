@@ -1,10 +1,17 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
-import {useAuth} from '../../contexts/AuthContext';
+import {useDispatch, useSelector} from "react-redux";
+import {authActions} from "../../store/auth";
 import './Sidebar.scss'
 
 const Sidebar = () => {
-    const {isAuthenticated, logout, isOpenSidebar} = useAuth();
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const isOpenSidebar = useSelector(state => state.ui.isOpenSidebar);
+
+    const handleLogout = () => {
+        dispatch(authActions.logout());
+    }
 
     return (
         <>
@@ -22,9 +29,9 @@ const Sidebar = () => {
                         </NavLink>
                     </li>
                     <li className="nav-item">
-                        <a onClick={logout} className="nav-link">
+                        <span onClick={handleLogout} className="nav-link">
                             Logout
-                        </a>
+                        </span>
                     </li>
                 </ul>
             </div>

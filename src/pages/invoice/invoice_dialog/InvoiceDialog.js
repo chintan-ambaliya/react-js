@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import {useSelector} from "react-redux";
 import './InvoiceDialog.scss';
 import {useNavigate} from "react-router-dom";
 import {createInvoice, fetchInvoice, updateInvoice} from "../../../api/API";
-import {useAuth} from "../../../contexts/AuthContext";
 
 const InvoiceDialog = (props) => {
     const navigate = useNavigate();
-    const {isAuthenticated} = useAuth();
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const [record, setRecord] = useState(null);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
     const [error, setError] = useState(null);
+    const [warning, setWarning] = useState(false);
 
     // fields state
     const [quotation, setQuotation] = useState('');
@@ -63,6 +64,24 @@ const InvoiceDialog = (props) => {
         navigate('/invoice');
     };
 
+    const canBeSaved = () => {
+        const values = {
+            id: record ? record.id : 0,
+            quotation,
+            client,
+            email,
+            start_date: startDate,
+            end_date: endDate,
+            amount,
+            status,
+        };
+        const vals = Object.values(values);
+        const hasWarning = vals.every(i => i);
+        setWarning(!hasWarning);
+        return hasWarning;
+
+    };
+
     const handleCreateInvoice = async () => {
         if (updating) return;
         const values = {
@@ -75,6 +94,7 @@ const InvoiceDialog = (props) => {
             amount,
             status,
         };
+        if (!canBeSaved()) return;
         setUpdating(true);
         try {
             if (props.itemId === 'new') {
@@ -111,39 +131,44 @@ const InvoiceDialog = (props) => {
                             {!loading &&
                             <form>
                                 <div className="row">
+                                    {warning &&
+                                    <div class="col-12">
+                                        <div className="alert alert-warning p-2">All fields are required.</div>
+                                    </div>
+                                    }
                                     <div className="mb-3 col-md-6">
                                         <label className="form-label" htmlFor="field_quotation">Quotation</label>
-                                        <input type="text" className="form-control" id="field_quotation" placeholder="Quotation"
+                                        <input type="text" className={`form-control ${warning ? quotation ? 'is-valid': 'is-invalid' : ''}`} id="field_quotation" placeholder="Quotation"
                                                value={quotation} onChange={(e) => setQuotation(e.target.value)}/>
                                     </div>
                                     <div className="mb-3 col-md-6">
                                         <label className="form-label" htmlFor="field_client">Client</label>
-                                        <input type="text" className="form-control" id="field_client" placeholder="Client"
+                                        <input type="text" className={`form-control ${warning ? client ? 'is-valid': 'is-invalid' : ''}`} id="field_client" placeholder="Client"
                                                value={client} onChange={(e) => setClient(e.target.value)}/>
                                     </div>
                                     <div className="mb-3 col-md-12">
                                         <label className="form-label" htmlFor="field_email">Email</label>
-                                        <input type="email" className="form-control" id="field_email" placeholder="Email"
+                                        <input type="email" className={`form-control ${warning ? email ? 'is-valid': 'is-invalid' : ''}`} id="field_email" placeholder="Email"
                                                value={email} onChange={(e) => setEmail(e.target.value)}/>
                                     </div>
                                     <div className="mb-3 col-md-6">
                                         <label className="form-label" htmlFor="field_start_date">Start Date</label>
-                                        <input type="date" className="form-control" id="field_start_date" placeholder="Start Date"
+                                        <input type="date" className={`form-control ${warning ? startDate ? 'is-valid': 'is-invalid' : ''}`} id="field_start_date" placeholder="Start Date"
                                                value={startDate} onChange={(e) => setStartDate(e.target.value)}/>
                                     </div>
                                     <div className="mb-3 col-md-6">
                                         <label className="form-label" htmlFor="field_end_date">End Date</label>
-                                        <input type="date" className="form-control" id="field_end_date" placeholder="End Date"
+                                        <input type="date" className={`form-control ${warning ? endDate ? 'is-valid': 'is-invalid' : ''}`} id="field_end_date" placeholder="End Date"
                                                value={endDate} onChange={(e) => setEndDate(e.target.value)}/>
                                     </div>
                                     <div className="mb-3 col-md-6">
                                         <label className="form-label" htmlFor="field_amount">Amount</label>
-                                        <input type="number" className="form-control" id="field_amount" placeholder="Amount"
+                                        <input type="number" className={`form-control ${warning ? amount ? 'is-valid': 'is-invalid' : ''}`} id="field_amount" placeholder="Amount"
                                                value={amount} onChange={(e) => setAmount(e.target.value)}/>
                                     </div>
                                     <div className="mb-3 col-md-6">
                                         <label className="form-label" htmlFor="field_status">Status</label>
-                                        <select className="form-control" id="field_status" value={status}
+                                        <select className={`form-control ${warning ? status ? 'is-valid': 'is-invalid' : ''}`} id="field_status" value={status}
                                                 onChange={(e) => setStatus(e.target.value)}>
                                             {statusData.map(s => <option value={s} key={s}>{s}</option>)}
                                         </select>
